@@ -10,15 +10,15 @@ $http.baseUrl = 'http://api-hmugo-web.itheima.net'
 
 //拦截器
 $http.beforeRequest = function(option){
-	// uni.showLoading({
-	// 	title:'数据加载中。。。'
-	// })
+	uni.showLoading({
+		title:'数据加载中'
+	})
 }
 
 
 $http.afterRequest = function(option){
 	
-	// uni.hideLoading()
+	uni.hideLoading()
 }
 
 uni.$showMsg = function(title = "请求数据失败", duration =1500){
