@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<my-search @click="gotoSearch()"></my-search>
 		<view class="scroll-view-container">
 			<scroll-view class="left-scroll-view" scroll-y="true" :style="{height: wh+'px'}">
 				
@@ -46,7 +47,7 @@
 		},
 		onLoad() {
 			const info = uni.getSystemInfoSync()
-			this.wh = info.windowHeight
+			this.wh = info.windowHeight-50
 			
 			this.getCateList()
 		},
@@ -67,6 +68,12 @@
 				uni.navigateTo({
 					url:'/subpkg/goods_list/goods_list?cid='+item.cat_id
 				})
+			},
+			gotoSearch(){
+				uni.navigateTo({
+					url:'/subpkg/search/search'
+				})
+				
 			}
 			
 			

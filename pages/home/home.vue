@@ -1,5 +1,10 @@
 <template>
 	<view>
+		<!-- 搜索栏部分 -->
+		<view class="search-area">
+			<my-search @click='gotoSearch()'></my-search>
+		</view>
+		
 		<!-- uni swiper组件 -->
 		<!-- 轮播图 -->
 		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000">
@@ -128,6 +133,11 @@
 				uni.navigateTo({
 					url
 				})
+			},
+			gotoSearch(){
+				uni.navigateTo({
+					url:'/subpkg/search/search'
+				})
 			}
 			
 		}
@@ -167,5 +177,10 @@
 	.floor-img-box{
 		display: flex;
 		padding-left: 10rpx;
+	}
+	.search-area{
+		position: sticky; // 粘性
+		top: 0; // 最顶部
+		z-index: 999;
 	}
 </style>
