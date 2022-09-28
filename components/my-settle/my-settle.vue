@@ -11,22 +11,25 @@
 		</view>
 		
 		<!-- 结算按钮 -->
-		<view class="btn-settle">结算({{checkedCount}})</view>
+		<view class="btn-settle" @click="settlement">结算({{checkedCount}})</view>
 		
 	</view>
 </template>
 
 <script>
-	import {mapGetters, mapMutations} from "vuex"
+	import {mapGetters, mapMutations, mapState} from "vuex"
 	export default {
 		name:"my-settle",
 		data() {
 			return {
-				
+				second: 3,
+				timer: null
 			};
 		},
 		computed: {
 			...mapGetters('m_cart', ['checkedCount','total','checkedGoodsAmount']),
+			...mapGetters('m_user',['addstr']),
+			...mapState('m_user', ['token']),
 			isFullChecked(){
 				// console.log(this.total === this.checkedCount);
 				return this.total === this.checkedCount
@@ -34,9 +37,52 @@
 		},
 		methods: {
 			...mapMutations('m_cart', ['updateAllGoodsState']),
+			...mapMutations('m_user', ['updateRedirectInfo']),
 			changeAllState(){
 				
 				this.updateAllGoodsState(!this.isFullChecked)
+			},
+			settlement(){
+				if(! this.checkedCount) return uni.$showMsg('请选择结算的商品！')
+				
+				if(! this.addstr) return uni.$showMsg('请选择收货地址！')
+				
+				if(! this.token) return this.delayNavi()
+			},
+			
+			delayNavi(){
+				this.second = 3
+				this.showTips(this.second)
+				this.timer = setInterval(()=>{
+					this.second--
+					if(this.second <=0){
+						clearInterval(this.timer)
+						uni.switchTab({
+							url:'/pages/my/my',
+							success: () => {
+								this.updateRedirectInfo({
+									type: 'switchTab',
+									from: '/pages/cart/cart'
+									
+								})
+								
+							}
+						})
+						
+						return
+					}
+					this.showTips(this.second)
+				}, 1000)
+				
+			},
+			showTips(n){
+				uni.showToast({
+					icon:"none",
+					title:'请登录后再结算！' + n + ' 秒后自动跳转到登录页',
+					mask: true,
+					duration: 1500
+				})
+				
 			}
 			
 		}
